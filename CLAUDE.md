@@ -5,7 +5,7 @@ Poznámky na zápočet z predmetu VKARM (regulácia: Laplaceova transformácia, 
 ## Súbory
 
 - `zapocet-vkarm.html`: celá stránka „Zápočet VKARM“ v jednom HTML súbore (CSS a JS sú inline). Vzorce sa píšu v LaTeX-e pre MathJax 3: inline `\( ... \)`, blokové `\[ ... \]`. Písmo je IBM Plex z Google Fonts.
-- `artifact.json`: väzba na artefakt na claude.ai (slug, URL, posledná synchronizovaná verzia, nastavenie zdieľania). Je v `.gitignore`, takže v novom klone chýba. Vtedy ho vytvor znova: slug `c04605d0-09b9-4867-b2e9-07b558914aeb`, verziu zisti cez `get_artifact` a obsah porovnaj so `zapocet-vkarm.html`.
+- `artifact.json`: väzba na artefakt na claude.ai (slug, URL, posledná synchronizovaná verzia, nastavenie zdieľania). Je v `.gitignore`, takže v novom klone chýba. Vtedy ho vytvor znova: zavolaj `get_artifact` s URL artefaktu (zistíš slug aj verziu) a obsah porovnaj so `zapocet-vkarm.html`.
 
 ## Synchronizácia s artefaktom na claude.ai
 
