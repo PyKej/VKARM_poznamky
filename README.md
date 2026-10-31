@@ -1,7 +1,7 @@
 # VKARM_poznamky
 
-Poznámky na zápočet z VKARM.
+Study notes for the VKARM course credit test.
 
-Stránka na Claude: https://claude.ai/artifact/Qk5dMpkMoGjaWNG5aepegS
+Page on Claude: https://claude.ai/artifact/Qk5dMpkMoGjaWNG5aepegS
 
-Upravuje: Patrik Pitka Kester
+Maintained by: Patrik Pitka Kester

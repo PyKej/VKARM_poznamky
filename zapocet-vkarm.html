@@ -5,7 +5,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <style>
-/* Layout: one reading column (~48rem) under a sticky chapter bar; each chapter runs recipe → worked exam example → exercise cards with step-by-step hints */
+/* Layout: wide page (~88rem) under a sticky chapter bar; on desktop a sticky left menu (chapters + subsections, scroll-spy) beside the content column (~62rem). Chapters are numbered 01–06, worked examples and exercise cards KK.NN; hints open and close all at once */
 :root{
   --bg:#f2f4f7; --surface:#ffffff; --ink:#16202a; --muted:#56616e; --rule:#d5dce4; --grid:rgba(29,91,184,.075);
   --accent:#1d5bb8; --accent-soft:#e6eefb;
@@ -45,7 +45,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 a{color:var(--accent)}
 b{font-weight:600}
 p{margin:0 0 .9em}
-.wrap{max-width:48rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:88rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .small{font-size:.92rem;color:var(--muted)}
 .lbl{font:500 11.5px/1.4 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 .5em}
 .eyebrow{font:500 12px/1.4 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0}
@@ -65,6 +65,7 @@ h1{font:600 clamp(2.5rem,8vw,3.75rem)/1 var(--f-display);letter-spacing:-.015em;
 .sheet-r:hover{background:var(--accent-soft)}
 .intro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr));gap:14px}
 .intro-grid .note{margin:0}
+.hero .sheet,.hero .intro-grid{max-width:62rem}
 
 /* ---------- sticky chapter bar ---------- */
 .toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--rule)}
@@ -78,6 +79,29 @@ h1{font:600 clamp(2.5rem,8vw,3.75rem)/1 var(--f-display);letter-spacing:-.015em;
 .prog{display:flex;align-items:center;gap:8px;font:500 13px var(--f-mono);color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 .prog .bar{width:56px;height:6px;border-radius:3px;background:var(--code);overflow:hidden}
 .prog .bar span{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+.toc .cn,.side .cn{font:500 11.5px var(--f-mono);color:var(--muted);margin-right:6px;font-variant-numeric:tabular-nums}
+
+/* ---------- page grid + left menu ---------- */
+.page{display:grid;grid-template-columns:15rem minmax(0,62rem);gap:48px}
+.page>main{min-width:0}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);align-self:start;max-height:calc(100vh - 80px);overflow-y:auto;padding:28px 4px 24px 0;scrollbar-width:thin}
+.side ol{list-style:none;margin:0;padding:0}
+.side>ol{display:grid;gap:2px}
+.side .sc-a{display:flex;align-items:baseline;gap:4px;padding:6px 10px;border-radius:4px;font:500 14.5px/1.35 var(--f-body);color:var(--muted);text-decoration:none}
+.side .sc-a .n{margin-left:auto;font:500 11.5px var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.side .sc-a .n.full{color:var(--ok)}
+.side .sc-a:hover{background:var(--code);color:var(--ink)}
+.side li.cur>.sc-a{background:var(--code);color:var(--ink)}
+.side li.cur>.sc-a .cn{color:var(--accent)}
+.side .sub{display:none;margin:2px 0 8px 22px;border-left:1px solid var(--rule)}
+.side li.cur>.sub{display:block}
+.side .sub a{display:block;padding:4px 10px 4px 12px;margin-left:-1px;border-left:2px solid transparent;font-size:13.5px;line-height:1.35;color:var(--muted);text-decoration:none}
+.side .sub a:hover{color:var(--ink)}
+.side .sub a.cur{color:var(--accent);border-left-color:var(--accent);font-weight:500}
+@media (max-width:1100px){
+  .page{grid-template-columns:minmax(0,1fr)}
+  .side{display:none}
+}
 
 /* ---------- chapters ---------- */
 .ch{padding-block:56px 12px}
@@ -162,6 +186,10 @@ figcaption{font-size:.92rem;color:var(--muted);margin-top:8px}
 .ex{background:var(--surface);border:1px solid var(--rule);border-radius:6px;margin:14px 0;transition:border-color .2s}
 .ex-h{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;padding:11px 16px;border-bottom:1px solid var(--rule);border-radius:6px 6px 0 0}
 .ex-t{font:600 1.06rem/1.3 var(--f-display)}
+.num{font:600 13px/1.4 var(--f-mono);font-variant-numeric:tabular-nums;color:var(--surface);background:var(--accent);padding:1px 7px;border-radius:3px;letter-spacing:.02em}
+.vzor-h .num{margin-right:10px}
+.ch-num{font:500 .55em var(--f-mono);color:var(--accent);vertical-align:.3em;margin-right:.45em;letter-spacing:0}
+a.xref{font:500 .92em var(--f-mono);white-space:nowrap}
 .tag{font:500 11.5px/1.5 var(--f-mono);background:var(--code);color:var(--muted);padding:1px 8px;border-radius:3px}
 .tag.hod{background:var(--accent-soft);color:var(--accent);font-weight:500}
 .dg .eq{font:400 30px var(--f-body);fill:var(--muted)}
@@ -225,7 +253,7 @@ mjx-container{color:inherit}
   <div class="wrap">
     <p class="eyebrow">VKARM · priebežná písomka · 20 bodov</p>
     <h1>Zápočet VKARM</h1>
-    <p class="lede">Cvičná stránka podľa minuloročnej písomky (SAR&nbsp;1, ZS 2024/2025) a zadaní z tohtoročných cvičení. Pri každej úlohe nájdeš recept (čo počítaš a v akom poradí), vyriešený vzor a cvičenia. Keď sa zasekneš, klikni na <b>Nápovedu</b>. Ukáže ti vždy iba ďalší krok, nie celé riešenie.</p>
+    <p class="lede">Cvičná stránka podľa minuloročnej písomky (SAR&nbsp;1, ZS 2024/2025) a zadaní z tohtoročných cvičení. Pri každej úlohe nájdeš recept (čo počítaš a v akom poradí), vyriešený vzor a cvičenia. Keď sa zasekneš, klikni na <b>Nápovedu</b>. Odkryje všetky kroky postupu naraz (bez výsledku) a ďalším klikom ju zas skryješ.</p>
 
     <div class="sheet">
       <div class="sheet-h"><span>Minuloročná písomka</span><span>body</span></div>
@@ -252,7 +280,7 @@ mjx-container{color:inherit}
         <p class="lbl">Ako so stránkou pracovať</p>
         <ol class="plain">
           <li>Prečítaj recept a prejdi vzor z písomky alebo z hodiny.</li>
-          <li>Cvičenia rieš na papier. Nápoveda odkryje vždy jeden krok.</li>
+          <li>Cvičenia rieš na papier. Nápoveda sa odkryje aj skryje jedným klikom.</li>
           <li>Riešenie si otvor až na konci a porovnaj.</li>
           <li>Keď to zvládneš bez pomoci, zaškrtni <b>Mám to</b>. Stav si pamätá tento prehliadač.</li>
         </ol>
@@ -275,7 +303,9 @@ mjx-container{color:inherit}
   </div>
 </div>
 
-<main class="wrap">
+<div class="wrap page">
+<aside class="side" aria-label="Obsah"></aside>
+<main>
 
 <!-- ================================================================ LAPLACE -->
 <section class="ch" id="laplace">
@@ -291,8 +321,7 @@ mjx-container{color:inherit}
       \[\begin{aligned}
         y'(t)&\mathrel{\widehat{=}} \pw{s}Y(s)-\dv{y(0)}\\[4pt]
         y''(t)&\mathrel{\widehat{=}} \pw{s^2}Y(s)-\pw{s}\,\dv{y(0)}-\dv{y'(0)}\\[4pt]
-        y'''(t)&\mathrel{\widehat{=}} \pw{s^3}Y(s)-\pw{s^2}\dv{y(0)}\\
-        &\qquad\ -\pw{s}\,\dv{y'(0)}-\dv{y''(0)}
+        y'''(t)&\mathrel{\widehat{=}} \pw{s^3}Y(s)-\pw{s^2}\dv{y(0)}-\pw{s}\,\dv{y'(0)}-\dv{y''(0)}
       \end{aligned}\]
     </div>
     <div class="lap-col">
@@ -358,10 +387,17 @@ mjx-container{color:inherit}
   <div class="tw"><table class="lt">
     <thead><tr><th>Originál \(f(t)\)</th><th>Obraz \(F(s)\)</th><th>Kedy ho stretneš</th></tr></thead>
     <tbody>
+      <tr><td>\(\delta(t)\), jednotkový impulz</td><td>\(1\)</td><td>odozva na impulz: jej obraz je priamo prenosová funkcia</td></tr>
       <tr><td>\(1(t)\), jednotkový skok</td><td>\(\dfrac{1}{s}\)</td><td>ustálená hodnota odozvy</td></tr>
       <tr><td>\(t\)</td><td>\(\dfrac{1}{s^2}\)</td><td>dvojnásobný koreň \(s=0\) (5. cvičenie)</td></tr>
+      <tr><td>\(t^n,\ n=1,2,3,\dots\)</td><td>\(\dfrac{n!}{s^{n+1}}\)</td><td>trojnásobný a vyšší koreň \(s=0\), napr. \(\dfrac{2}{s^3}\to t^2\)</td></tr>
       <tr><td>\(e^{-at}\)</td><td>\(\dfrac{1}{s+a}\)</td><td>každý jednoduchý koreň, najčastejšie</td></tr>
+      <tr><td>\(e^{at}\)</td><td>\(\dfrac{1}{s-a}\)</td><td>ten istý riadok so znamienkom naopak: kladný koreň \(s=a\), výstup rastie (nestabilný systém)</td></tr>
       <tr><td>\(t\,e^{-at}\)</td><td>\(\dfrac{1}{(s+a)^2}\)</td><td>dvojnásobný koreň (5. cvičenie)</td></tr>
+      <tr><td>\(t^n e^{-at}\)</td><td>\(\dfrac{n!}{(s+a)^{n+1}}\)</td><td>trojnásobný a vyšší koreň, napr. \(\dfrac{2}{(s+a)^3}\to t^2e^{-at}\)</td></tr>
+      <tr><td>\(t^p,\ p>-1\)</td><td>\(\dfrac{\Gamma(p+1)}{s^{p+1}}\)</td><td>zovšeobecnenie \(t^n\) pre neceločíselné \(p\); pre \(p=n\) je \(\Gamma(n+1)=n!\)</td></tr>
+      <tr><td>\(\sqrt{t}\)</td><td>\(\dfrac{\sqrt{\pi}}{2s^{3/2}}\)</td><td>riadok \(t^p\) pre \(p=\tfrac12\)</td></tr>
+      <tr><td>\(t^{\,n-\frac12},\ n=1,2,3,\dots\)</td><td>\(\dfrac{1\cdot3\cdot5\cdots(2n-1)\sqrt{\pi}}{2^n\,s^{\,n+\frac12}}\)</td><td>riadok \(t^p\) pre polovičné \(p\)</td></tr>
     </tbody>
   </table></div>
   <p>Ako čítať riadok \(e^{-at}\): číslo za \(s+\) v menovateli je to isté číslo v exponente so znamienkom mínus. Teda \(\dfrac{1}{s+3}\to e^{-3t}\) a \(\dfrac{2}{s+3}\to 2e^{-3t}\).</p>
@@ -626,7 +662,7 @@ mjx-container{color:inherit}
     </div>
   </div>
 
-  <div class="ex" data-id="pfh-1" data-title="Cvičenie 12" data-tag="prechodová funkcia · ako cv. 11">
+  <div class="ex" data-id="pfh-1" data-title="Cvičenie 12" data-tag="prechodová funkcia · ako" data-tag-ref="pf-8">
     <div class="task"><p>Vypočítaj prechodovú funkciu \(h(t)\) systému s prenosom \(F(s)=\dfrac{2}{(s+1)(s+2)}\).</p></div>
     <div class="hint"><p>\(H(s)=\dfrac{F(s)}{s}=\dfrac{2}{s\,(s+1)(s+2)}=\dfrac{A}{s}+\dfrac{B}{s+1}+\dfrac{C}{s+2}\).</p></div>
     <div class="hint"><p>\(A\): \(s=0\), \(\frac{2}{1\cdot2}=1\). \(B\): \(s=-1\), \(\frac{2}{(-1)(1)}=-2\). \(C\): \(s=-2\), \(\frac{2}{(-2)(-1)}=1\).</p></div>
@@ -1175,7 +1211,7 @@ mjx-container{color:inherit}
 
   <div class="ex" data-id="h6-1" data-title="Zadanie č. 6 · meranie RC obvodu" data-src="cv. 6">
     <div class="task"><p>Na cvičení ste merali prechodovú charakteristiku RC obvodu a identifikovali ho ako systém 1. rádu \(\dfrac{K}{Ts+1}\). Odvoď z modelu obvodu jeho prenos a prechodovú funkciu. Ako z nameranej charakteristiky odčítaš \(K\) a \(T\)?</p><figure class="fig"><div class="sc"><svg class="dg" viewBox="0 0 396 206" style="min-width:300px;max-width:476px" role="img" aria-label="R v pozdĺžnej vetve, C v priečnej" xmlns="http://www.w3.org/2000/svg"><defs><marker id="c-o1-a" viewBox="0 0 10 10" refX="9.6" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path class="ah" d="M0,1 L10,5 L0,9 z"/></marker><marker id="c-o1-h" class="hl" viewBox="0 0 10 10" refX="9.6" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path class="ah" d="M0,1 L10,5 L0,9 z"/></marker></defs><circle class="term" cx="44" cy="56" r="3.6"/><circle class="term" cx="44" cy="186" r="3.6"/><circle class="term" cx="344" cy="56" r="3.6"/><circle class="term" cx="344" cy="186" r="3.6"/><polyline class="w" points="47.6,186 340.4,186"/><polyline class="w" points="268,56 340.4,56"/><polyline class="w" points="24,68 24,174" marker-end="url(#c-o1-a)"/><text class="m" x="11" y="121" text-anchor="middle" dominant-baseline="central">u<tspan class="sub" dy="5">1</tspan></text><polyline class="w" points="366,68 366,174" marker-end="url(#c-o1-a)"/><text class="m" x="380" y="121" text-anchor="middle" dominant-baseline="central">u<tspan class="sub" dy="5">2</tspan></text><circle class="dot" cx="268" cy="56" r="3"/><circle class="dot" cx="268" cy="186" r="3"/><rect class="box" x="138" y="49" width="36" height="14"/><text class="m" x="156" y="34" text-anchor="middle" dominant-baseline="central">R</text><polyline class="w" points="47.6,56 138,56"/><polyline class="w" points="174,56 268,56"/><line class="plate" x1="255" y1="117" x2="281" y2="117"/><line class="plate" x1="255" y1="125" x2="281" y2="125"/><text class="m" x="287" y="121" text-anchor="start" dominant-baseline="central">C</text><polyline class="w" points="268,56 268,117"/><polyline class="w" points="268,125 268,186"/></svg></div></figure></div>
-    <div class="hint"><p>Rovnica je \(RC\,u_2'(t)+u_2(t)=u_1(t)\) (cvičenie 1 vyššie), prenos \(\dfrac{1}{RCs+1}\). Porovnaj s \(\dfrac{K}{Ts+1}\).</p></div>
+    <div class="hint"><p>Rovnica je \(RC\,u_2'(t)+u_2(t)=u_1(t)\) (cvičenie <a class="xref" data-ref="rc-1"></a> vyššie), prenos \(\dfrac{1}{RCs+1}\). Porovnaj s \(\dfrac{K}{Ts+1}\).</p></div>
     <div class="hint"><p>\(H(s)=\dfrac{1}{s\,(Ts+1)}=\dfrac{1}{T}\cdot\dfrac{1}{s\,(s+\frac1T)}\). Zakrývaním: \(\dfrac1s-\dfrac{1}{s+\frac1T}\).</p></div>
     <div class="hint"><p>Dosaď \(t=T\) do výsledku: \(1-e^{-1}\approx0{,}632\).</p></div>
     <div class="sol"><p>\(K=1\), \(T=RC\)</p>
@@ -1480,6 +1516,7 @@ mjx-container{color:inherit}
 </section>
 
 </main>
+</div>
 
 <footer class="foot">
   <div class="wrap">
@@ -1504,6 +1541,41 @@ window.MathJax = {
   try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { state = {}; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
+  // numbering: chapters 01–06, worked examples and exercise cards KK.NN in document order
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('section.ch'));
+  var numOf = {};
+  chapters.forEach(function (sec, ci) {
+    var cn = pad(ci + 1);
+    sec.dataset.num = cn;
+    var h2 = sec.querySelector('h2');
+    if (h2) {
+      var hs = document.createElement('span');
+      hs.className = 'ch-num';
+      hs.textContent = cn;
+      h2.insertBefore(hs, h2.firstChild);
+    }
+    sec.querySelectorAll('.vzor, .ex').forEach(function (el, i) {
+      var num = cn + '.' + pad(i + 1);
+      el.dataset.num = num;
+      el.id = 'u-' + num.replace('.', '-');
+      if (el.dataset.id) numOf[el.dataset.id] = num;
+      var vh = el.classList.contains('vzor') && el.querySelector('.vzor-h');
+      if (vh) {
+        var vs = document.createElement('span');
+        vs.className = 'num';
+        vs.textContent = num;
+        vh.insertBefore(vs, vh.firstChild);
+      }
+    });
+  });
+  document.querySelectorAll('a.xref').forEach(function (a) {
+    var num = numOf[a.dataset.ref];
+    if (!num) return;
+    a.textContent = num;
+    a.href = '#u-' + num.replace('.', '-');
+  });
+
   var exs = Array.prototype.slice.call(document.querySelectorAll('.ex'));
 
   exs.forEach(function (ex) {
@@ -1515,9 +1587,14 @@ window.MathJax = {
     // header
     var head = document.createElement('div');
     head.className = 'ex-h';
+    var num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = ex.dataset.num;
+    head.appendChild(num);
     var t = document.createElement('span');
     t.className = 'ex-t';
-    t.textContent = ex.dataset.title || 'Cvičenie';
+    // the old per-chapter "Cvičenie 7" would clash with the page-wide number
+    t.textContent = (ex.dataset.title || 'Cvičenie').replace(/^Cvičenie \d+$/, 'Cvičenie');
     head.appendChild(t);
     if (ex.dataset.src) {
       var hod = document.createElement('span');
@@ -1529,7 +1606,7 @@ window.MathJax = {
     if (ex.dataset.tag) {
       var tag = document.createElement('span');
       tag.className = 'tag';
-      tag.textContent = ex.dataset.tag;
+      tag.textContent = ex.dataset.tag + (numOf[ex.dataset.tagRef] ? ' ' + numOf[ex.dataset.tagRef] : '');
       head.appendChild(tag);
     }
     if (ex.dataset.pts) {
@@ -1565,21 +1642,20 @@ window.MathJax = {
 
     var acts = document.createElement('div');
     acts.className = 'acts';
-    var shown = 0;
     var n = hints.length;
     if (n) {
       var hb = document.createElement('button');
       hb.type = 'button';
       hb.className = 'b b-hint';
       var word = n === 1 ? 'krok' : (n < 5 ? 'kroky' : 'krokov');
-      var setHb = function () {
-        if (shown >= n) { hb.textContent = 'Všetky nápovedy sú odkryté'; hb.disabled = true; }
-        else if (shown === 0) hb.textContent = n > 1 ? 'Nápoveda (' + n + ' ' + word + ')' : 'Nápoveda';
-        else hb.textContent = 'Ďalší krok (' + (shown + 1) + ' z ' + n + ')';
-      };
-      setHb();
+      var showTxt = n > 1 ? 'Ukázať nápovedu (' + n + ' ' + word + ')' : 'Ukázať nápovedu';
+      hb.textContent = showTxt;
+      hb.setAttribute('aria-expanded', 'false');
       hb.addEventListener('click', function () {
-        if (shown < n) { hints[shown].classList.add('on'); shown++; setHb(); }
+        var on = hb.getAttribute('aria-expanded') !== 'true';
+        hints.forEach(function (h) { h.classList.toggle('on', on); });
+        hb.textContent = on ? 'Skryť nápovedu' : showTxt;
+        hb.setAttribute('aria-expanded', on ? 'true' : 'false');
       });
       acts.appendChild(hb);
     }
@@ -1599,6 +1675,59 @@ window.MathJax = {
     body.insertBefore(acts, sol || null);
   });
 
+  // left menu: chapters with their h3 subsections; names come from the top bar so both match
+  var side = document.querySelector('.side');
+  var sideItems = [];
+  if (side) {
+    var sideList = document.createElement('ol');
+    chapters.forEach(function (sec) {
+      var topA = document.querySelector('.toc nav a[href="#' + sec.id + '"]');
+      var h2 = sec.querySelector('h2');
+      var name = topA ? topA.firstChild.textContent : (h2 ? h2.textContent : sec.id);
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.className = 'sc-a';
+      a.href = '#' + sec.id;
+      var cn = document.createElement('span');
+      cn.className = 'cn';
+      cn.textContent = sec.dataset.num;
+      var nm = document.createElement('span');
+      nm.textContent = name;
+      var cnt = document.createElement('span');
+      cnt.className = 'n';
+      cnt.dataset.sec = sec.id;
+      a.appendChild(cn); a.appendChild(nm); a.appendChild(cnt);
+      li.appendChild(a);
+      var subs = [];
+      var sub = document.createElement('ol');
+      sub.className = 'sub';
+      sec.querySelectorAll('h3').forEach(function (h, i) {
+        if (!h.id) h.id = sec.id + '-' + (i + 1);
+        var sl = document.createElement('li');
+        var sa = document.createElement('a');
+        sa.href = '#' + h.id;
+        // runs before MathJax, so strip the \( \) delimiters instead of showing raw TeX
+        sa.textContent = h.textContent.replace(/\\\(|\\\)/g, '').trim();
+        sl.appendChild(sa);
+        sub.appendChild(sl);
+        subs.push({ h: h, a: sa });
+      });
+      if (subs.length) li.appendChild(sub);
+      sideList.appendChild(li);
+      sideItems.push({ sec: sec, li: li, a: a, subs: subs });
+    });
+    side.appendChild(sideList);
+  }
+  // chapter numbers in the top bar too
+  document.querySelectorAll('.toc nav a').forEach(function (a) {
+    var sec = document.querySelector(a.getAttribute('href'));
+    if (!sec || !sec.dataset.num) return;
+    var cn = document.createElement('span');
+    cn.className = 'cn';
+    cn.textContent = sec.dataset.num;
+    a.insertBefore(cn, a.firstChild);
+  });
+
   // progress
   function update() {
     var total = exs.length, done = 0;
@@ -1607,7 +1736,7 @@ window.MathJax = {
     var bar = document.getElementById('prog-bar');
     if (txt) txt.textContent = done + '/' + total + ' hotovo';
     if (bar) bar.style.width = (total ? (100 * done / total) : 0) + '%';
-    document.querySelectorAll('.toc .n').forEach(function (n) {
+    document.querySelectorAll('.toc .n, .side .n').forEach(function (n) {
       var sec = document.getElementById(n.dataset.sec);
       if (!sec) return;
       var list = sec.querySelectorAll('.ex');
@@ -1619,21 +1748,39 @@ window.MathJax = {
   }
   update();
 
-  // highlight current chapter in the bar
+  // highlight current chapter in the bar, current chapter + subsection in the left menu
   var links = Array.prototype.slice.call(document.querySelectorAll('.toc nav a'));
   var secs = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
-  var lastCur = -2;
+  var lastCur = -2, lastSub = null, lastTarget = null;
+  function scrollSide(el) {
+    if (!side || side.offsetParent === null) return;
+    var r = el.getBoundingClientRect(), sr = side.getBoundingClientRect();
+    if (r.top < sr.top) side.scrollTop += r.top - sr.top - 8;
+    else if (r.bottom > sr.bottom) side.scrollTop += r.bottom - sr.bottom + 8;
+  }
   function onScroll() {
     var y = window.scrollY + 120, cur = -1;
     secs.forEach(function (s, i) { if (s && s.offsetTop <= y) cur = i; });
-    if (cur === lastCur) return;
-    lastCur = cur;
-    links.forEach(function (a, i) { a.classList.toggle('cur', i === cur); });
-    if (cur >= 0) {
-      var nav = links[cur].parentNode;
-      var l = links[cur].offsetLeft - nav.offsetLeft - nav.clientWidth / 2 + links[cur].clientWidth / 2;
-      try { nav.scrollTo({ left: l, behavior: 'smooth' }); } catch (e) { nav.scrollLeft = l; }
+    if (cur !== lastCur) {
+      lastCur = cur;
+      links.forEach(function (a, i) { a.classList.toggle('cur', i === cur); });
+      sideItems.forEach(function (it) { it.li.classList.toggle('cur', cur >= 0 && it.sec === secs[cur]); });
+      if (cur >= 0) {
+        var nav = links[cur].parentNode;
+        var l = links[cur].offsetLeft - nav.offsetLeft - nav.clientWidth / 2 + links[cur].clientWidth / 2;
+        try { nav.scrollTo({ left: l, behavior: 'smooth' }); } catch (e) { nav.scrollLeft = l; }
+      }
     }
+    var it = null, subA = null;
+    sideItems.forEach(function (x) { if (cur >= 0 && x.sec === secs[cur]) it = x; });
+    if (it) it.subs.forEach(function (o) { if (o.h.getBoundingClientRect().top + window.scrollY <= y) subA = o.a; });
+    if (subA !== lastSub) {
+      if (lastSub) lastSub.classList.remove('cur');
+      if (subA) subA.classList.add('cur');
+      lastSub = subA;
+    }
+    var target = subA || (it ? it.a : null);
+    if (target !== lastTarget) { lastTarget = target; if (target) scrollSide(target); }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
